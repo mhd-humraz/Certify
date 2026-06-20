@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Generate Certificates – CertifyPro{% endblock %}
+{% block page_title %}Bulk Certificate Generation{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-header py-3">
+        <i class="bi bi-lightning-charge me-2 text-warning"></i>Generate Certificates
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info mb-4 small">
+          <i class="bi bi-info-circle me-1"></i>
+          Certificates are generated as PDF using the selected template and event's participant list.
+          Already-generated certificates are skipped.
+        </div>
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label fw-500">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+            {% if field.errors %}<div class="text-danger small">{{ field.errors }}</div>{% endif %}
+          </div>
+          {% endfor %}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-cp">
+              <i class="bi bi-lightning me-1"></i> Generate Now
+            </button>
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <h6 class="fw-600 mb-3"><i class="bi bi-question-circle me-2 text-muted"></i>How it works</h6>
+        <ol class="small text-muted mb-0">
+          <li class="mb-2">Select the event and a certificate template</li>
+          <li class="mb-2">System overlays each participant's name, event info, date, certificate ID and QR code on the template</li>
+          <li class="mb-2">Each certificate is saved as a PDF with a unique ID (e.g. <code>CERT-2026-0001</code>)</li>
+          <li>Download individually or as a ZIP from the Event detail page</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

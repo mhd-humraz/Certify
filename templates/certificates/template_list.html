@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Templates – CertifyPro{% endblock %}
+{% block page_title %}Certificate Templates{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="mb-0">Templates</h4>
+  <a href="{% url 'template_create' %}" class="btn btn-cp"><i class="bi bi-upload me-1"></i> Upload Template</a>
+</div>
+
+{% if templates %}
+<div class="row g-3">
+  {% for t in templates %}
+  <div class="col-sm-6 col-xl-4">
+    <div class="card h-100">
+      {% if t.template_file %}
+      <img src="{{ t.template_file.url }}" class="card-img-top" alt="{{ t.template_name }}"
+           style="height:180px;object-fit:cover;border-radius:12px 12px 0 0">
+      {% else %}
+      <div class="d-flex align-items-center justify-content-center bg-light"
+           style="height:180px;border-radius:12px 12px 0 0">
+        <i class="bi bi-image text-muted fs-1"></i>
+      </div>
+      {% endif %}
+      <div class="card-body">
+        <h6 class="fw-700 mb-1">{{ t.template_name }}</h6>
+        <small class="text-muted">Added {{ t.created_at|date:"M d, Y" }}</small>
+        {% if t.is_active %}
+        <span class="badge bg-success-subtle text-success ms-2">Active</span>
+        {% endif %}
+      </div>
+      <div class="card-footer bg-transparent border-top d-flex gap-2">
+        <a href="{% url 'template_delete' t.pk %}" class="btn btn-sm btn-outline-danger"
+           onclick="return confirm('Delete this template?')">
+          <i class="bi bi-trash me-1"></i> Delete
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card">
+  <div class="text-center py-5 text-muted">
+    <i class="bi bi-layout-text-window fs-1 d-block mb-3"></i>
+    <p>No templates uploaded yet.</p>
+    <a href="{% url 'template_create' %}" class="btn btn-cp">Upload First Template</a>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}Participants – {{ event.event_name }}{% endblock %}
+{% block page_title %}Participants{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h4 class="mb-1">Participants</h4>
+    <span class="text-muted small">{{ event.event_name }}</span>
+  </div>
+  <div class="d-flex gap-2">
+    <a href="{% url 'upload_participants' event.pk %}" class="btn btn-outline-primary btn-sm">
+      <i class="bi bi-upload me-1"></i> Import Excel
+    </a>
+    <a href="{% url 'event_detail' event.pk %}" class="btn btn-outline-secondary btn-sm">Back</a>
+  </div>
+</div>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header py-3">
+        <i class="bi bi-people me-2 text-primary"></i>{{ participants.count }} Participants
+      </div>
+      <div class="card-body p-0">
+        {% if participants %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr><th>Name</th><th>Email</th><th>College</th><th>Course</th><th></th></tr>
+            </thead>
+            <tbody>
+              {% for p in participants %}
+              <tr>
+                <td class="fw-500">{{ p.name }}</td>
+                <td class="text-muted small">{{ p.email }}</td>
+                <td class="text-muted small">{{ p.college }}</td>
+                <td class="text-muted small">{{ p.course }}</td>
+                <td>
+                  <a href="{% url 'participant_delete' p.pk %}" class="btn btn-xs btn-outline-danger"
+                     style="font-size:.72rem;padding:.2rem .5rem"
+                     onclick="return confirm('Delete {{ p.name }}?')">
+                    <i class="bi bi-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-person-x fs-1 d-block mb-3"></i>
+          No participants yet. Add one below or import from Excel.
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card">
+      <div class="card-header py-3">
+        <i class="bi bi-person-plus me-2 text-success"></i>Add Participant
+      </div>
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-3">
+            <label class="form-label small fw-500">{{ field.label }}</label>
+            {{ field }}
+          </div>
+          {% endfor %}
+          <button type="submit" class="btn btn-cp w-100">Add</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Import Participants{% endblock %}
+{% block page_title %}Import Participants{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-header py-3">
+        <i class="bi bi-upload me-2 text-primary"></i>Import from Excel / CSV
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info d-flex gap-3 align-items-start mb-4">
+          <i class="bi bi-info-circle-fill fs-5 mt-1 flex-shrink-0"></i>
+          <div>
+            <strong>Event:</strong> {{ event.event_name }}<br>
+            <strong>File must contain columns:</strong>
+            <code>name</code>, <code>email</code>, <code>college</code> (optional), <code>course</code> (optional)
+          </div>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% for field in form %}
+          <div class="mb-4">
+            <label class="form-label fw-500">{{ field.label }}</label>
+            {{ field }}
+          </div>
+          {% endfor %}
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-cp">Import</button>
+            <a href="{% url 'participant_list' event.pk %}" class="btn btn-outline-secondary">Cancel</a>
+          </div>
+        </form>
+
+        <hr class="my-4">
+        <h6 class="small fw-600 text-muted text-uppercase">Sample CSV format</h6>
+        <pre class="bg-light p-3 rounded small">name,email,college,course
+Alice Johnson,alice@example.com,MIT,Computer Science
+Bob Smith,bob@example.com,Stanford,Data Science</pre>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
